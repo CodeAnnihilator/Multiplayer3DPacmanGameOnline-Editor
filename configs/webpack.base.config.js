@@ -6,7 +6,7 @@ export default {
     alias: {
       '@src': SRC
     },
-    extensions: ['.js']
+    extensions: ['.js', '.json']
   },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin()
@@ -18,6 +18,9 @@ export default {
         loader: 'babel-loader'
       }],
 			exclude: /node_modules/
-		}]
+		}, {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }]
 	}
 }
