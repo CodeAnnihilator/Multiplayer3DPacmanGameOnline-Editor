@@ -1,39 +1,25 @@
-import React, { Component } from 'react'
-import * as THREE from 'three'
+import React, { PureComponent } from 'react'
+import THREE, { Vector3, Euler } from 'three'
 
 import level1 from './levels/level1'
 
-export default class Level extends Component {
-  constructor() {
-    super()
-    this.state = {
-      tree: null
-    }
-  }
-  componentWillMount() {
-    const loader = new THREE.JSONLoader ()
-    loader.load('./assets/tree.js', tree => {
-      // const mesh = new THREE.SkinnedMesh(tree)
-      // console.log(mesh)
-      // mesh.scale.set(1, 1, 1)
-      this.setState({ tree: tree })
-    })
-  }
+import Tree1 from './meshes/Tree1'
+import Ground1 from './meshes/Ground1'
+import DummyRock1 from './meshes/DummyRock1'
+
+export default class Level extends PureComponent {
   render() {
-    const { tree } = this.state
-    console.log(tree)
     return (
       <group>
         {
           level1.map((row, y) => {
             return row.map((cell, x) => {
-              const position = new THREE.Vector3(x, y, 0)
-              return (
-                <mesh key={x} position={position}>
-                  <boxGeometry width={1} height={1} depth={cell === 0 ? 4 : 0} />
-                  <meshBasicMaterial color={cell === 0 ? 'silver' : 'pink'} />
-                </mesh>
-              )
+              const position = new Vector3(x, y, 0)
+              if (cell.groundType === 0) {
+                if (cell.assetType === 0) return <DummyRock1 positionX={x} positionY={y} />
+                return <Tree1 positionX={x} positionY={y} rotationY={cell.rotationX} />
+              }
+              return <Ground1 positionX={x} positionY={y} />
             })
           })
         }
@@ -41,8 +27,3 @@ export default class Level extends Component {
     )
   }
 }
-
-// <mesh key={x} position={position}>
-//   <boxGeometry width={1} height={1} depth={cell === 0 ? 4 : 0} />
-//   <meshBasicMaterial color={cell === 0 ? 'silver' : 'pink'} />
-// </mesh>

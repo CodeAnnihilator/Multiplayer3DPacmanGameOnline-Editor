@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
-import * as THREE from 'three'
+import { Vector3 } from 'three'
 
 export default class Camera extends Component {
-  constructor() {
-    super()
-    this.cameraPosition = new THREE.Vector3(10, 10, 21)
-  }
   render() {
+    const { cameraPositionX, cameraPositionY } = this.props
     const width = window.innerWidth
     const height = window.innerHeight
+    const cameraPosition = new Vector3(cameraPositionX, cameraPositionY - 1, 4)
+    const lookAt = new Vector3(cameraPositionX, cameraPositionY, 0)
     return (
       <perspectiveCamera
         name='camera'
-        fov={75}
-        aspect={width / height}
-        near={0.1}
-        far={1000}
-        position={this.cameraPosition}
+        fov={ 75 }
+        aspect={ width / height }
+        near={ 0.1 }
+        far={ 1000 }
+        position={ cameraPosition }
+        lookAt={ lookAt }
       />
     )
   }
