@@ -38,8 +38,8 @@ export default class App extends Component {
   }
 
   render() {
-    const width = window.innerWidth - 20
-    const height = window.innerHeight - 20
+    const width = window.innerWidth
+    const height = window.innerHeight - 4
     const { tree, treeTexture, groundTexture } = this.state
     return (
       <div>
@@ -56,7 +56,6 @@ export default class App extends Component {
                   <geometry resourceId="treeGeometry" faces={ tree.faces } vertices={ tree.vertices } faceVertexUvs={ tree.faceVertexUvs } />
                 </resources>
                 <scene>
-                  <ambientLight color={ 0xdddddd } />
                   <Level />
                   <Pacman />
                 </scene>

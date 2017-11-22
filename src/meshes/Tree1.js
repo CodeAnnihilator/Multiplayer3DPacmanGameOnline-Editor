@@ -28,8 +28,8 @@ export default class Tree1 extends Component {
           <materialResource resourceId="treeTexture" />
         </mesh>
         <mesh position={renderPosition}>
-          <boxGeometry width={1} height={1} depth={0} />
-          <meshBasicMaterial color={'green'} />
+          <boxGeometry width={1} height={1} depth={0.01} />
+          <materialResource resourceId='groundTexture' />
         </mesh>
       </group>
     )

@@ -7,7 +7,7 @@ export default class Ground1 extends Component {
     const renderPosition = new Vector3(positionX, positionY, 0)
     return (
       <mesh position={renderPosition}>
-        <boxGeometry width={1} height={1} depth={0} />
+        <boxGeometry width={1} height={1} depth={0.01} />
         <materialResource resourceId='groundTexture' />
       </mesh>
     )
