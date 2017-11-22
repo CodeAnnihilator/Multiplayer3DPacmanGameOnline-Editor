@@ -24,7 +24,7 @@ const ground = [
 const randomGround = ground.map(row => {
   return row.map(cell => {
     if (cell === 0) return {
-      groundType: 0,
+      groundType: cell,
       assetType: Math.round(Math.random() * 2),
       rotationX: Math.round(Math.random() * 360)
     }

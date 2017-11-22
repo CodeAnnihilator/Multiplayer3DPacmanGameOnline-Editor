@@ -10,11 +10,13 @@ export default class Pacman extends Component {
     this.initialPosition = level1.reduce((c, n, y) => (n.reduce((c1, n1, x) => n1.groundType === 5 ? c = { x, y } : ''), c), {})
     this.state = {
       isMoving: false,
-      speed: 0.01,
+      speed: 0.012,
       diffX: 0,
       diffY: 0,
       nextX: this.initialPosition.x,
       nextY: this.initialPosition.y,
+      predictX: null,
+      predictY: null,
       x: this.initialPosition.x,
       y: this.initialPosition.y,
       z: 0,
@@ -43,7 +45,7 @@ export default class Pacman extends Component {
   }
 
   move = () => {
-    const { speed, x, y, diffX, diffY, nextX, nextY, isMoving } = this.state
+    const { speed, x, y, diffX, diffY, nextX, nextY, isMoving, predictX, predictY } = this.state
     const nextXpos = x + diffX * speed
     const nextYpos = y + diffY * speed
     const isNextTileReached = this.isNextTileReached()
@@ -53,7 +55,15 @@ export default class Pacman extends Component {
     }
     if (!isMoving) {
       if (!isNextTileReached) return this.setState({ x: nextXpos, y: nextYpos })
-      if (isNextTileReached) return this.setState({ x: nextX, y: nextY })
+      if (isNextTileReached) {
+        if (predictX && predictY) {
+          return this.setState({ x: nextX, y: nextY, nextX: predictX, nextY: predictY, predictX: null, predictY: null,
+            diffX: predictX - nextX,
+            diffY: predictY - nextY
+          })
+        }
+        return this.setState({ x: nextX, y: nextY })
+      }
     } else {
       if (!isNextTileReached) this.setState({ x: nextXpos, y: nextYpos })
       if (isNextTileReached) this.setState({ x: nextXpos, y: nextYpos, nextX: nextX + diffX, nextY: nextY + diffY })
@@ -65,13 +75,20 @@ export default class Pacman extends Component {
     if (destinationTile.groundType === 0) return
     const diffX = nextX - this.state.nextX
     const diffY = nextY - this.state.nextY
+    const isNextTileReached = this.isNextTileReached()
+    if (!this.state.isMoving && !isNextTileReached) {
+      return this.setState({ predictX: nextX, predictY: nextY })
+      // if ((diffX !== 0 && nextY !== 0) || (diffY !== 0 && nextX !== 0)) {
+      //   console.log(nextY)
+      //   if (diffX === 0) return this.setState({ diffX, nextX, predictX: nextX, predictY: nextY })
+      //   return this.setState({ predictX: nextX, predictY: nextY })
+      // }
+    }
     this.setState({ diffX, diffY, nextX, nextY, isMoving: true })
   }
 
   handleKeyPress = e => {
     if (this.state.isMoving) return
-    // const isNextTileReached = this.isNextTileReached()
-    // TODO: disable move y if x is moving
     if (e.keyCode === 37) this.checkDestination(this.state.nextX - 1, this.state.nextY)
     if (e.keyCode === 39) this.checkDestination(this.state.nextX + 1, this.state.nextY)
     if (e.keyCode === 38) this.checkDestination(this.state.nextX, this.state.nextY + 1)
