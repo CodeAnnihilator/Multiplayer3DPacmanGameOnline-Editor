@@ -101,10 +101,12 @@ export default class Pacman extends Component {
 
   render() {
     const position = new Vector3(this.state.x, this.state.y, 0)
-    const lightPosition = new Vector3(this.state.x, this.state.y, 1.5)
+    const lightPosition = new Vector3(this.state.x, this.state.y, 5)
+    const lightPosition1 = new Vector3(this.state.x, this.state.y, 2)
     return (
       <group>
-        <pointLight distance={3} decay={2} intensity={3} position={lightPosition} castShadow={true} color={ 0xe19d3c } />
+        <pointLight distance={7} decay={3} intensity={7} position={lightPosition} castShadow={true} color='#d7ecfd' />
+        <pointLight distance={9} decay={20} intensity={15} position={lightPosition1} castShadow={true} color='pink' />
         <Camera cameraPositionX={this.state.x} cameraPositionY={this.state.y} />
         <mesh position={position}>
           <sphereGeometry radius={0.2} widthSegments={32} heightSegments={32} />

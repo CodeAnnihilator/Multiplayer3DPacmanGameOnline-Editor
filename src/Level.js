@@ -16,8 +16,8 @@ export default class Level extends PureComponent {
             return row.map((cell, x) => {
               const position = new Vector3(x, y, 0)
               if (cell.groundType === 0) {
-                if (cell.assetType === 0) return <DummyRock1 positionX={x} positionY={y} />
-                return <Tree1 positionX={x} positionY={y} rotationY={cell.rotationX} />
+                if (cell.assetType === 1) return <DummyRock1 positionX={x} positionY={y} />
+                if (cell.assetType === 2) return <Tree1 positionX={x} positionY={y} rotationY={cell.rotationX} />
               }
               return <Ground1 positionX={x} positionY={y} />
             })

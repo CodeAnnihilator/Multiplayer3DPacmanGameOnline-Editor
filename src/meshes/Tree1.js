@@ -18,7 +18,7 @@ export default class Tree1 extends Component {
   }
   render() {
     const { scale, positionX, positionY, rotationX, rotationY } = this.state
-    const renderScale = new Vector3(scale, scale, scale)
+    const renderScale = new Vector3(scale, Math.random() * 0.01 + scale, scale)
     const renderPosition = new Vector3(positionX, positionY, 0)
     const renderRotation = new Euler(rotationX, rotationY, 0)
     return (
@@ -29,7 +29,7 @@ export default class Tree1 extends Component {
         </mesh>
         <mesh position={renderPosition}>
           <boxGeometry width={1} height={1} depth={0.01} />
-          <materialResource resourceId='groundTexture' />
+          <materialResource resourceId='groundTexture1' />
         </mesh>
       </group>
     )

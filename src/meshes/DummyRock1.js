@@ -8,7 +8,7 @@ export default class DummyRock1 extends Component {
     return (
       <mesh position={renderPosition}>
         <boxGeometry width={1} height={1} depth={2} />
-        <meshPhongMaterial color={'silver'} />
+        <materialResource resourceId='wallTexture' />
       </mesh>
     )
   }

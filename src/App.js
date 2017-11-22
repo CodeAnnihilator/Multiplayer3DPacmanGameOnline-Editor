@@ -14,14 +14,18 @@ export default class App extends Component {
       tree: null,
       treeTexture: null,
       groundTexture: null,
+      groundTexture1: null,
+      wallTexture: null,
     }
   }
   componentDidMount() {
     this.mounted = true
     window.THREE = THREE
-    loadModel('./assets/tree11.json').then(geometry => this.setState({ tree: geometry }))
-    loadTexture('./assets/res.png').then(texture => this.setState({ treeTexture: texture }))
+    loadModel('./assets/tree2-1.json').then(geometry => this.setState({ tree: geometry }))
+    loadTexture('./assets/tree2-1.jpg').then(texture => this.setState({ treeTexture: texture }))
     loadTexture('./assets/tile.jpg').then(texture => this.setState({ groundTexture: texture }))
+    loadTexture('./assets/groundTexture.jpg').then(texture => this.setState({ groundTexture1: texture }))
+    loadTexture('./assets/wallTexture.jpg').then(texture => this.setState({ wallTexture: texture }))
     this.requestGameLoop()
   }
   componentWillUnmount() {
@@ -50,8 +54,12 @@ export default class App extends Component {
               <React3 mainCamera="camera" width={ width } height={ height } antialias>
                 <resources>
                   <texture resourceId="groundImage" url='./assets/tile.jpg' anisotropy={ 16 } />
-                  <texture resourceId="treeImage" url='./assets/res.png' anisotropy={ 16 } />
+                  <texture resourceId="groundImage1" url='./assets/groundTexture.jpg' anisotropy={ 16 } />
+                  <texture resourceId="wallImage" url='./assets/wallTexture.jpg' anisotropy={ 16 } />
+                  <texture resourceId="treeImage" url='./assets/tree2-1.jpg' anisotropy={ 16 } />
                   <meshPhongMaterial resourceId="groundTexture"><textureResource resourceId="groundImage" /></meshPhongMaterial>
+                  <meshPhongMaterial resourceId="groundTexture1"><textureResource resourceId="groundImage1" /></meshPhongMaterial>
+                  <meshPhongMaterial resourceId="wallTexture"><textureResource resourceId="wallImage" /></meshPhongMaterial>
                   <meshPhongMaterial resourceId="treeTexture"><textureResource resourceId="treeImage" /></meshPhongMaterial>
                   <geometry resourceId="treeGeometry" faces={ tree.faces } vertices={ tree.vertices } faceVertexUvs={ tree.faceVertexUvs } />
                 </resources>
