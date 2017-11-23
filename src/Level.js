@@ -7,6 +7,7 @@ import Tree1 from './meshes/Tree1'
 import Ground1 from './meshes/Ground1'
 import DummyRock1 from './meshes/DummyRock1'
 import GhostHomeTile from './meshes/GhostHomeTile'
+import TreeTrump from './meshes/TreeTrump'
 
 export default class Level extends PureComponent {
   render() {
@@ -22,6 +23,9 @@ export default class Level extends PureComponent {
               }
               if (cell.groundType === 4) {
                 if (cell.assetType === 1) return <GhostHomeTile positionX={x} positionY={y} />
+              }
+              if (cell.groundType === 6) {
+                if (cell.assetType === 1) return <TreeTrump positionX={x} positionY={y} rotationY={cell.rotationX} />
               }
               return <Ground1 positionX={x} positionY={y} />
             })

@@ -14,6 +14,7 @@ export default class App extends Component {
     super()
     this.state = {
       tree: null,
+      treeTrump: null,
       treeTexture: null,
       groundTexture: null,
       groundTexture1: null,
@@ -25,6 +26,7 @@ export default class App extends Component {
     this.mounted = true
     window.THREE = THREE
     loadModel('./assets/tree2-1.json').then(geometry => this.setState({ tree: geometry }))
+    loadModel('./assets/tree-trump.json').then(geometry => this.setState({ treeTrump: geometry }))
     loadTexture('./assets/tree2-1.jpg').then(texture => this.setState({ treeTexture: texture }))
     loadTexture('./assets/tile.jpg').then(texture => this.setState({ groundTexture: texture }))
     loadTexture('./assets/groundTexture.jpg').then(texture => this.setState({ groundTexture1: texture }))
@@ -47,12 +49,12 @@ export default class App extends Component {
   render() {
     const width = window.innerWidth
     const height = window.innerHeight - 4
-    const { tree, treeTexture, groundTexture } = this.state
+    const { tree, treeTexture, groundTexture, treeTrump } = this.state
     return (
       <div>
         <FPSStats />
         {
-          (!tree || !treeTexture || !groundTexture)
+          (!tree || !treeTexture || !groundTexture || !treeTrump)
             ? 'Loading...'
             : (
               <React3 shadowMapType={PCFSoftShadowMap} shadowMapEnabled mainCamera="camera" width={ width } height={ height } antialias>
@@ -68,6 +70,7 @@ export default class App extends Component {
                   <meshPhongMaterial shininess={0} resourceId="treeTexture"><textureResource resourceId="treeImage" /></meshPhongMaterial>
                   <meshPhongMaterial shininess={0} resourceId="tileGhostLandTexture"><textureResource resourceId="tileGhostLandImage" /></meshPhongMaterial>
                   <geometry resourceId="treeGeometry" faces={ tree.faces } vertices={ tree.vertices } faceVertexUvs={ tree.faceVertexUvs } />
+                  <geometry resourceId="treeTrumpGeometry" faces={ treeTrump.faces } vertices={ treeTrump.vertices } faceVertexUvs={ treeTrump.faceVertexUvs } />
                 </resources>
                 <scene>
                   <Cloud />
