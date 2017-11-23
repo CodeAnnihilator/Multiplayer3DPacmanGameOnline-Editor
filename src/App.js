@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import THREE, { Vector3, Euler } from 'three'
+import THREE, { Vector3, Euler, PCFSoftShadowMap } from 'three'
 import React3 from 'react-three-renderer'
 
 import Level from './Level'
@@ -51,7 +51,7 @@ export default class App extends Component {
           (!tree || !treeTexture || !groundTexture)
             ? 'Loading...'
             : (
-              <React3 mainCamera="camera" width={ width } height={ height } antialias>
+              <React3 shadowMapType={PCFSoftShadowMap} shadowMapEnabled mainCamera="camera" width={ width } height={ height } antialias>
                 <resources>
                   <texture resourceId="groundImage" url='./assets/tile.jpg' anisotropy={ 16 } />
                   <texture resourceId="groundImage1" url='./assets/groundTexture.jpg' anisotropy={ 16 } />

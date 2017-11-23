@@ -23,11 +23,11 @@ export default class Tree1 extends Component {
     const renderRotation = new Euler(rotationX, rotationY, 0)
     return (
       <group>
-        <mesh position={renderPosition} rotation={renderRotation} scale={renderScale}>
+        <mesh castShadow receiveShadow position={renderPosition} rotation={renderRotation} scale={renderScale}>
           <geometryResource resourceId="treeGeometry" />
           <materialResource resourceId="treeTexture" />
         </mesh>
-        <mesh position={renderPosition}>
+        <mesh receiveShadow position={renderPosition}>
           <boxGeometry width={1} height={1} depth={0.01} />
           <materialResource resourceId='groundTexture1' />
         </mesh>

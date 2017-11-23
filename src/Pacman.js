@@ -101,12 +101,28 @@ export default class Pacman extends Component {
 
   render() {
     const position = new Vector3(this.state.x, this.state.y, 0)
-    const lightPosition = new Vector3(this.state.x, this.state.y, 5)
-    const lightPosition1 = new Vector3(this.state.x, this.state.y, 2)
+    const lightPosition = new Vector3(this.state.x, this.state.y + 1, 5)
+    const lightPosition1 = new Vector3(this.state.x, this.state.y, 5)
     return (
       <group>
-        <pointLight distance={7} decay={3} intensity={7} position={lightPosition} castShadow={true} color='#d7ecfd' />
-        <pointLight distance={9} decay={20} intensity={15} position={lightPosition1} castShadow={true} color='pink' />
+        <pointLight castShadow
+          key="light1"
+          color='#d7ecfd'
+          shadowCameraNear={0.1}
+          shadowCameraFar={55}
+          position={lightPosition}
+          distance={7}
+          decay={3}
+          intensity={7}
+        />
+        <pointLight
+          key="light2"
+          color='navy'
+          distance={15}
+          decay={10}
+          intensity={15}
+          position={lightPosition1}
+        />
         <Camera cameraPositionX={this.state.x} cameraPositionY={this.state.y} />
         <mesh position={position}>
           <sphereGeometry radius={0.2} widthSegments={32} heightSegments={32} />
@@ -117,52 +133,22 @@ export default class Pacman extends Component {
   }
 }
 
-// constructor() {
-//   super()
-//   this.initialPosition = level1.reduce((c, n, y) => (n.reduce((c1, n1, x) => n1.groundType === 5 ? c = { x, y } : ''), c), {})
-//   this.state = {
-//     isMoving: false,
-//     dX: 0,
-//     dY: 0,
-//     x: this.initialPosition.x,
-//     y: this.initialPosition.y,
-//     z: 0,
-//   }
-// }
+// <pointLight castShadow
+//   color='pink'
+//   shadowCameraNear={0.1}
+//   shadowCameraFar={10}
+//   distance={9}
+//   decay={20}
+//   intensity={15}
+//   position={lightPosition1}
+// />
 
-// timer = () => {
-//   if (this.state.isMoving) {
-//     const isReachedDX = parseFloat((this.state.dX - this.state.x).toFixed(10)) === 0
-//     const isReachedDY = parseFloat((this.state.dY - this.state.y).toFixed(10)) === 0
-//     if (isReachedDX && isReachedDY) {
-//       console.log(this.state.x)
-//       console.log(this.state.dX)
-//       return this.setState({
-//         isMoving: false,
-//         x: this.state.dX,
-//         y: this.state.dY
-//       })
-//     } else {
-//       const x1 = this.state.dX - this.state.x
-//       const y1 = this.state.dY - this.state.y
-//       return this.setState({
-//         x: !isReachedDX ? x1 > 0 ? this.state.x + 0.005 : this.state.x - 0.005 : this.state.dX,
-//         y: !isReachedDY ? y1 > 0 ? this.state.y + 0.005 : this.state.y - 0.005 : this.state.dY
-//       })
-//     }
-//   }
-// }
-//
-// setNewPosition = (x, y) => {
-//   if (this.state.isMoving) return
-//   const destinationTile = level1[y][x]
-//   if (destinationTile.groundType === 0) return
-//   this.setState({ dX: x, dY: y, isMoving: true })
-// }
-
-// handleKeyPress = e => {
-//   if (e.keyCode === 37) this.setNewPosition(this.state.x - 1, this.state.y)
-//   if (e.keyCode === 39) this.setNewPosition(this.state.x + 1, this.state.y)
-//   if (e.keyCode === 38) this.setNewPosition(this.state.x, this.state.y + 1)
-//   if (e.keyCode === 40) this.setNewPosition(this.state.x, this.state.y - 1)
-// }
+// <pointLight castShadow
+//   color='#d7ecfd'
+//   shadowCameraNear={0.1}
+//   shadowCameraFar={1}
+//   position={lightPosition}
+//   distance={7}
+//   decay={3}
+//   intensity={7}
+// />
