@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import THREE, { Vector3, Euler, PCFSoftShadowMap } from 'three'
 import React3 from 'react-three-renderer'
+import { FPSStats } from 'react-stats'
 
 import Level from './Level'
 import Pacman from './Pacman'
+import Cloud from './Cloud'
 
 import { loadModel, loadTexture } from '../utils/loadAsset'
 
@@ -16,6 +18,7 @@ export default class App extends Component {
       groundTexture: null,
       groundTexture1: null,
       wallTexture: null,
+      tileGhostLand: null,
     }
   }
   componentDidMount() {
@@ -26,6 +29,7 @@ export default class App extends Component {
     loadTexture('./assets/tile.jpg').then(texture => this.setState({ groundTexture: texture }))
     loadTexture('./assets/groundTexture.jpg').then(texture => this.setState({ groundTexture1: texture }))
     loadTexture('./assets/wallTexture.jpg').then(texture => this.setState({ wallTexture: texture }))
+    loadTexture('./assets/tileGhostLand.jpg').then(texture => this.setState({ tileGhostLand: texture }))
     this.requestGameLoop()
   }
   componentWillUnmount() {
@@ -40,13 +44,13 @@ export default class App extends Component {
     if (!this.mounted) return
     this.requestGameLoop()
   }
-
   render() {
     const width = window.innerWidth
     const height = window.innerHeight - 4
     const { tree, treeTexture, groundTexture } = this.state
     return (
       <div>
+        <FPSStats />
         {
           (!tree || !treeTexture || !groundTexture)
             ? 'Loading...'
@@ -57,13 +61,16 @@ export default class App extends Component {
                   <texture resourceId="groundImage1" url='./assets/groundTexture.jpg' anisotropy={ 16 } />
                   <texture resourceId="wallImage" url='./assets/wallTexture.jpg' anisotropy={ 16 } />
                   <texture resourceId="treeImage" url='./assets/tree2-1.jpg' anisotropy={ 16 } />
-                  <meshPhongMaterial resourceId="groundTexture"><textureResource resourceId="groundImage" /></meshPhongMaterial>
-                  <meshPhongMaterial resourceId="groundTexture1"><textureResource resourceId="groundImage1" /></meshPhongMaterial>
+                  <texture resourceId="tileGhostLandImage" url='./assets/tileGhostLand.jpg' anisotropy={ 16 } />
+                  <meshPhongMaterial shininess={0} resourceId="groundTexture"><textureResource resourceId="groundImage" /></meshPhongMaterial>
+                  <meshPhongMaterial shininess={0} resourceId="groundTexture1"><textureResource resourceId="groundImage1" /></meshPhongMaterial>
                   <meshPhongMaterial resourceId="wallTexture"><textureResource resourceId="wallImage" /></meshPhongMaterial>
-                  <meshPhongMaterial resourceId="treeTexture"><textureResource resourceId="treeImage" /></meshPhongMaterial>
+                  <meshPhongMaterial shininess={0} resourceId="treeTexture"><textureResource resourceId="treeImage" /></meshPhongMaterial>
+                  <meshPhongMaterial shininess={0} resourceId="tileGhostLandTexture"><textureResource resourceId="tileGhostLandImage" /></meshPhongMaterial>
                   <geometry resourceId="treeGeometry" faces={ tree.faces } vertices={ tree.vertices } faceVertexUvs={ tree.faceVertexUvs } />
                 </resources>
                 <scene>
+                  <Cloud />
                   <Level />
                   <Pacman />
                 </scene>

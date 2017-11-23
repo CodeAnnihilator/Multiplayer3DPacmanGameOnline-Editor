@@ -103,6 +103,7 @@ export default class Pacman extends Component {
     const position = new Vector3(this.state.x, this.state.y, 0)
     const lightPosition = new Vector3(this.state.x, this.state.y + 1, 5)
     const lightPosition1 = new Vector3(this.state.x, this.state.y, 5)
+    const lightPosition2 = new Vector3(4, 11, 4)
     return (
       <group>
         <pointLight castShadow
@@ -122,6 +123,14 @@ export default class Pacman extends Component {
           decay={10}
           intensity={15}
           position={lightPosition1}
+        />
+        <pointLight
+          key="light3"
+          color='red'
+          distance={35}
+          decay={30}
+          intensity={35}
+          position={lightPosition2}
         />
         <Camera cameraPositionX={this.state.x} cameraPositionY={this.state.y} />
         <mesh position={position}>
