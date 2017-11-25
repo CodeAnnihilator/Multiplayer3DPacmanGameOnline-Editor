@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import THREE, { Vector3, Euler, PCFSoftShadowMap } from 'three'
-
 import { loadModel, loadTexture } from '@src/../utils/loadAsset'
 
-export default class App extends Component {
+export default class Resources extends Component {
   constructor() {
     super()
+    this.assetsPath = 'components/Resources/assets'
     this.state = {
       firTree: null,
+      treeTrumpModel: null
     }
   }
 
@@ -15,32 +15,41 @@ export default class App extends Component {
     Promise.resolve()
       .then(() => {
         return Promise.all([
-          loadModel('../../assets/firTreeModel.json').then(geometry => this.setState({ firTree: geometry }))
+          loadModel(`${this.assetsPath}/firTree/firTreeModel.json`).then(geometry => this.setState({ firTree: geometry })),
+          loadModel(`${this.assetsPath}/treeTrump/treeTrumpModel.json`).then(geometry => this.setState({ treeTrumpModel: geometry }))
         ]).then(() => this.props.allModelsHaveBeenLoaded())
       })
       .then(() => {
         return Promise.all([
-          loadTexture('../../assets/firTreeImage.jpg')
+          loadTexture(`${this.assetsPath}/firTree/firTreeImage.jpg`),
+          loadTexture(`${this.assetsPath}/ground/forestGroundImage.jpg`)
         ]).then(() => this.props.allTexturesHaveBeenLoaded())
       })
   }
 
   render() {
-    const { firTree } = this.state
-    const { allModelsHaveBeenLoaded, allTexturesHaveBeenLoaded } = this.props
+    const { firTree, treeTrumpModel } = this.state
     const { isAllModelsLoaded, isAllTexturesLoaded } = this.props
     const shoudRender = isAllModelsLoaded && isAllTexturesLoaded
     return !shoudRender ? <resources /> : (
       <resources>
-        <texture resourceId='firTreeImage' url='./assets/firTreeImage.jpg' anisotropy={ 16 } />
+        <texture resourceId='firTreeImage' url={`${this.assetsPath}/firTree/firTreeImage.jpg`} anisotropy={ 16 } />
+        <texture resourceId='forestGroundImage' url={`${this.assetsPath}/ground/forestGroundImage.jpg`} anisotropy={ 16 } />
         <meshPhongMaterial shininess={0} resourceId='firTreeTexture'>
           <textureResource resourceId='firTreeImage' />
         </meshPhongMaterial>
+        <meshPhongMaterial shininess={0} resourceId='forestGroundTexture'>
+          <textureResource resourceId='forestGroundImage' />
+        </meshPhongMaterial>
 
         <geometry resourceId='firTreeModel'
-          faceVertexUvs={ firTree.faceVertexUvs }
-          vertices={ firTree.vertices }
-          faces={ firTree.faces }
+          faceVertexUvs={firTree.faceVertexUvs}
+          vertices={firTree.vertices}
+          faces={firTree.faces}
+        />
+        <geometry resourceId='treeTrumpModel'
+          vertices={treeTrumpModel.vertices}
+          faces={treeTrumpModel.faces}
         />
       </resources>
     )
