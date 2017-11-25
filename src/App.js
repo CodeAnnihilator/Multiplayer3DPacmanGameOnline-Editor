@@ -15,6 +15,7 @@ export default class App extends Component {
     this.state = {
       tree: null,
       treeTrump: null,
+      pacman: null,
       treeTexture: null,
       groundTexture: null,
       groundTexture1: null,
@@ -27,6 +28,7 @@ export default class App extends Component {
     window.THREE = THREE
     loadModel('./assets/tree2-1.json').then(geometry => this.setState({ tree: geometry }))
     loadModel('./assets/tree-trump.json').then(geometry => this.setState({ treeTrump: geometry }))
+    loadModel('./assets/pacman.json').then(geometry => this.setState({ pacman: geometry }))
     loadTexture('./assets/tree2-1.jpg').then(texture => this.setState({ treeTexture: texture }))
     loadTexture('./assets/tile.jpg').then(texture => this.setState({ groundTexture: texture }))
     loadTexture('./assets/groundTexture.jpg').then(texture => this.setState({ groundTexture1: texture }))
@@ -46,18 +48,31 @@ export default class App extends Component {
     if (!this.mounted) return
     this.requestGameLoop()
   }
+
+  _onAnimate = () => {
+    
+  }
+
   render() {
     const width = window.innerWidth
     const height = window.innerHeight - 4
-    const { tree, treeTexture, groundTexture, treeTrump } = this.state
+    const { tree, treeTexture, groundTexture, treeTrump, pacman } = this.state
     return (
       <div>
-        <FPSStats />
+        { /* <FPSStats /> */ }
         {
-          (!tree || !treeTexture || !groundTexture || !treeTrump)
+          (!tree || !treeTexture || !groundTexture || !treeTrump || !pacman)
             ? 'Loading...'
             : (
-              <React3 shadowMapType={PCFSoftShadowMap} shadowMapEnabled mainCamera="camera" width={ width } height={ height } antialias>
+              <React3
+                onAnimate={this._onAnimate}
+                shadowMapType={PCFSoftShadowMap}
+                shadowMapEnabled
+                mainCamera="camera"
+                width={ width }
+                height={ height }
+                antialias
+              >
                 <resources>
                   <texture resourceId="groundImage" url='./assets/tile.jpg' anisotropy={ 16 } />
                   <texture resourceId="groundImage1" url='./assets/groundTexture.jpg' anisotropy={ 16 } />
@@ -71,6 +86,7 @@ export default class App extends Component {
                   <meshPhongMaterial shininess={0} resourceId="tileGhostLandTexture"><textureResource resourceId="tileGhostLandImage" /></meshPhongMaterial>
                   <geometry resourceId="treeGeometry" faces={ tree.faces } vertices={ tree.vertices } faceVertexUvs={ tree.faceVertexUvs } />
                   <geometry resourceId="treeTrumpGeometry" faces={ treeTrump.faces } vertices={ treeTrump.vertices } faceVertexUvs={ treeTrump.faceVertexUvs } />
+                  <geometry resourceId="pacmanGeometry" faces={ pacman.faces } vertices={ pacman.vertices } />
                 </resources>
                 <scene>
                   <Cloud />

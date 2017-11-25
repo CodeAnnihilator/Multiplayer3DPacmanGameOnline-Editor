@@ -1,13 +1,17 @@
 import 'babel-polyfill'
 import React from 'react'
+import { Provider } from 'react-redux'
 import { render } from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { configureStore } from './store/configureStore'
+import { connect } from 'react-redux'
 
-import App from './App.js'
+import CanvasContainer from '@src/components/Canvas/CanvasContainer'
+
+const store = configureStore()
 
 render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <CanvasContainer store={store} />
+  </Provider>,
   document.getElementById('app')
 )
