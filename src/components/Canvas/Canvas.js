@@ -19,11 +19,12 @@ export default class Canvas extends Component {
     return (
       <div>
         <FPSStats />
-        <React3 mainCamera='camera'
+        <React3 mainCamera='mainCamera'
           shadowMapType={PCFSoftShadowMap}
           width={innerWidth}
           height={innerHeight}
           onAnimate={onAnimate}
+          clearColor='black'
           shadowMapEnabled
           antialias
         >
