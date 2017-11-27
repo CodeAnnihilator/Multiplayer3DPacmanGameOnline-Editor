@@ -6,10 +6,10 @@ const textureTypes = [
 ]
 
 const Ground = ({ positionX, positionY, ground }) => {
-  const renderPosition = new Vector3(positionX, positionY, 25)
+  const renderPosition = new Vector3(positionX, positionY, 0)
   return (
     <mesh receiveShadow position={renderPosition}>
-      <boxGeometry width={50} height={50} depth={50} />
+      <boxGeometry width={50} height={50} depth={0.001} />
       <materialResource resourceId={`${textureTypes[ground]}Texture`} />
     </mesh>
   )

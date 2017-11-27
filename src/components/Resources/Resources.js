@@ -22,7 +22,8 @@ export default class Resources extends Component {
       .then(() => {
         return Promise.all([
           loadTexture(`${this.assetsPath}/firTree/firTreeImage.jpg`),
-          loadTexture(`${this.assetsPath}/ground/forestGroundImage.jpg`)
+          loadTexture(`${this.assetsPath}/ground/forestGroundImage.jpg`),
+          loadTexture(`${this.assetsPath}/ground/stoneWallImage.jpg`),
         ]).then(() => this.props.allTexturesHaveBeenLoaded())
       })
   }
@@ -35,11 +36,15 @@ export default class Resources extends Component {
       <resources>
         <texture resourceId='firTreeImage' url={`${this.assetsPath}/firTree/firTreeImage.jpg`} anisotropy={ 16 } />
         <texture resourceId='forestGroundImage' url={`${this.assetsPath}/ground/forestGroundImage.jpg`} anisotropy={ 16 } />
+        <texture resourceId='stoneWallImage' url={`${this.assetsPath}/ground/stoneWallImage.jpg`} anisotropy={ 16 } />
         <meshPhongMaterial shininess={0} resourceId='firTreeTexture'>
           <textureResource resourceId='firTreeImage' />
         </meshPhongMaterial>
         <meshPhongMaterial shininess={0} resourceId='forestGroundTexture'>
           <textureResource resourceId='forestGroundImage' />
+        </meshPhongMaterial>
+        <meshPhongMaterial shininess={0} resourceId='stoneWallTexture'>
+          <textureResource resourceId='stoneWallImage' />
         </meshPhongMaterial>
 
         <geometry resourceId='firTreeModel'
