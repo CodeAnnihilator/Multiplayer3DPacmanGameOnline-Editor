@@ -19,8 +19,8 @@ export default class Scene extends Component {
     return (
       <SceneWrapper store={this.props.store}>
         <MainCamera name='mainCamera' />
-        <Light />
         { shouldRender && <Unsorted /> }
+        <Light />
       </SceneWrapper>
     )
   }

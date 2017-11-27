@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Vector3, Vector2, Raycaster, PerspectiveCamera, Mesh, PlaneBufferGeometry, MeshBasicMaterial, Euler } from 'three'
 
-import MainCamera from '@src/components/MainCamera/MainCamera'
 import Ground from '@src/meshes/ground/Ground'
+import Wall from '@src/meshes/ground/Wall'
 import RolloverMesh from '@src/meshes/rollover/RolloverMesh'
+import GridHelper from './GridHelper'
 
 const textureTypes = [
   'forestGround',
@@ -56,7 +57,6 @@ export default class Unsorted extends Component {
       const tilePosition = intersections[0].point
       const tileX = parseInt(tilePosition.x / this.state.tileSize, 10)
       const tileY = parseInt(tilePosition.y / this.state.tileSize, 10)
-      const tileZ = parseInt(tilePosition.z / this.state.tileSize, 10)
       const nextMatrix = this.state.matrix
         .map((row, y) => {
           return row.map((cell, x) => {
@@ -69,21 +69,20 @@ export default class Unsorted extends Component {
   }
 
   render() {
-    const planeRotation = new Euler(-Math.PI / 2, 0, 0)
-    const groundPosition = new Vector3(500, 500, 0)
-    const { innerWidth, innerHeight } = window
     const { matrix, tileSize } = this.state
+    const groundPosition = new Vector3(500, 500, 0)
     const cameraPosition = new Vector3(500, 100, 500)
     const lookAt = new Vector3(500, 460, 0)
     return (
       <group>
         <perspectiveCamera ref='camera' near={1} far={10000} fov={45}
-          aspect={innerWidth / innerHeight}
+          aspect={window.innerWidth / window.innerHeight}
           position={cameraPosition}
           lookAt={lookAt}
         />
         <group position={groundPosition}>
           <RolloverMesh mousePosition={this.state.mousePosition} />
+          <GridHelper length={matrix.length} tileSize={tileSize} />
           <group ref='intersectObjects'>
             {
               matrix.map((row, y) => {
@@ -92,25 +91,12 @@ export default class Unsorted extends Component {
                   const tylePositionY = y * tileSize - (matrix.length - 1) * tileSize / 2
                   if (!cell.length) return <Ground positionX={tylePositionX} positionY={tylePositionY} ground={0} />
                   return cell.map((tall, z) => {
-                    return (
-                      <mesh position={new Vector3(tylePositionX, tylePositionY, z * 50 + 25)}>
-                        <boxGeometry width={50} height={50} depth={50} />
-                        <materialResource resourceId={`${textureTypes[tall.ground]}Texture`} />
-                      </mesh>
-                    )
+                    return <Wall positionX={tylePositionX} positionY={tylePositionY} positionZ={z * 50 + 25} ground={tall.ground} />
                   })
                 })
               })
             }
           </group>
-          <gridHelper
-            rotation={planeRotation}
-            size={matrix.length * tileSize}
-            step={matrix.length}
-            colorCenterLine='#1e2934'
-            colorGrid='#1e2934'
-            position={new Vector3(0, 0, 0.002)}
-          />
         </group>
       </group>
     )

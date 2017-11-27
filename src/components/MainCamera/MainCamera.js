@@ -13,7 +13,7 @@ export default class MainCamera extends Component {
         aspect={innerWidth / innerHeight}
         lookAt={lookAt}
         near={1}
-        far={10000}
+        far={1000}
         fov={45}
       />
     )
