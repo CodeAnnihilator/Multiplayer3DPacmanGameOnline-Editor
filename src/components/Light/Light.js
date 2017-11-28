@@ -5,11 +5,17 @@ export default class Light extends Component {
   constructor() {
     super()
     this.state = {
-      dayTime: 1
+      dayTime: 1,
+      dir: -1
     }
   }
-  // componentDidMount() { this.countdown = setInterval(this.move, 100) }
-  // move = () => this.setState({ dayTime: this.state.dayTime < 0.1 ? 0.1 : this.state.dayTime - 0.01 })
+  // componentDidMount() { this.countdown = setInterval(this.move, 20) }
+  // move = () => {
+  //   if (this.state.dir > 0 && this.state.dayTime < 1) return this.setState({ dayTime: this.state.dayTime + 0.004 })
+  //   if (this.state.dir < 0 && this.state.dayTime > 0.1) return this.setState({ dayTime: this.state.dayTime - 0.004 })
+  //   if (this.state.dayTime >= 1) return this.setState({ dir: -this.state.dir })
+  //   if (this.state.dayTime <= 0.1) return this.setState({ dir: -this.state.dir })
+  // }
   render() {
     const dirLightPosition = new Vector3(-10, -10, 10)
     const pointLightPosition = new Vector3(400, 400, 400)
