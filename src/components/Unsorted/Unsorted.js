@@ -14,7 +14,8 @@ export default class Unsorted extends Component {
     this.state = {
       mousePosition: new Vector3(),
       matrix: this.matrix,
-      tileSize: 50
+      tileSize: 50,
+      wheel: 0
     }
   }
 
@@ -23,9 +24,16 @@ export default class Unsorted extends Component {
     document.addEventListener('mousedown', this.onDocumentMouseDown, false)
     document.addEventListener('keydown', this.onDocumentKeyDown, false)
     document.addEventListener('keyup', this.onDocumentKeyUp, false)
+    document.addEventListener('wheel', this.onDocumentWheel)
   }
 
-  setRaycasterSettings = (e) => {
+  onDocumentWheel = e => {
+    const wheelDirection = e.deltaY > 0
+    this.setState({ wheel: wheelDirection ? this.state.wheel + 1 : this.state.wheel - 1 })
+    console.log(this.state.wheel)
+  }
+
+  setRaycasterSettings = e => {
     const nextMousePositionX = (e.clientX / window.innerWidth) * 2 - 1
     const nextMousePositionY = -(e.clientY / window.innerHeight) * 2 + 1
     const raycasterMousePosition = new Vector2(nextMousePositionX, nextMousePositionY)

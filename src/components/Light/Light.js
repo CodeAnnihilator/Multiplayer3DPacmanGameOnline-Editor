@@ -9,13 +9,13 @@ export default class Light extends Component {
       dir: -1
     }
   }
-  // componentDidMount() { this.countdown = setInterval(this.move, 20) }
-  // move = () => {
-  //   if (this.state.dir > 0 && this.state.dayTime < 1) return this.setState({ dayTime: this.state.dayTime + 0.004 })
-  //   if (this.state.dir < 0 && this.state.dayTime > 0.1) return this.setState({ dayTime: this.state.dayTime - 0.004 })
-  //   if (this.state.dayTime >= 1) return this.setState({ dir: -this.state.dir })
-  //   if (this.state.dayTime <= 0.1) return this.setState({ dir: -this.state.dir })
-  // }
+  componentDidMount() { this.countdown = setInterval(this.move, 20) }
+  move = () => {
+    if (this.state.dir > 0 && this.state.dayTime < 1) return this.setState({ dayTime: this.state.dayTime + 0.001 })
+    if (this.state.dir < 0 && this.state.dayTime > 0.1) return this.setState({ dayTime: this.state.dayTime - 0.001 })
+    if (this.state.dayTime >= 1) return this.setState({ dir: -this.state.dir })
+    if (this.state.dayTime <= 0.1) return this.setState({ dir: -this.state.dir })
+  }
   render() {
     const dirLightPosition = new Vector3(-10, -10, 10)
     const pointLightPosition = new Vector3(400, 400, 400)
@@ -42,7 +42,7 @@ export default class Light extends Component {
         />
         <pointLight color='orange'
           position={new Vector3(500, 500, 50)}
-          intensity={10}
+          intensity={12}
           distance={100}
           decay={3}
         />

@@ -10,7 +10,7 @@ const GridHelper = ({ tileSize, length }) => {
       step={length}
       colorCenterLine='#1e2934'
       colorGrid='#1e2934'
-      position={new Vector3(0, 0, 0.002)}
+      position={new Vector3(0, 0, 0.1)}
     />
   )
 }

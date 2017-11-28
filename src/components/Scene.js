@@ -4,6 +4,7 @@ import { Vector3 } from 'three'
 
 import SceneWrapper from '@src/components/SceneWrapper'
 
+import SnowContainer from '@src/components/Weather/Snow/SnowContainer'
 import MainCamera from '@src/components/MainCamera/MainCamera'
 import LevelContainer from '@src/components/Level/LevelContainer'
 import Light from '@src/components/Light/Light'
@@ -20,6 +21,7 @@ export default class Scene extends Component {
       <SceneWrapper store={this.props.store}>
         <MainCamera name='mainCamera' />
         { shouldRender && <Unsorted /> }
+        { shouldRender && <SnowContainer /> }
         <Light />
       </SceneWrapper>
     )

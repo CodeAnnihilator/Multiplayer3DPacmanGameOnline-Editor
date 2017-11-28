@@ -10,7 +10,7 @@ export default class Snow extends Component {
     return (
       <points>
         <geometry vertices={verticles} />
-        <pointsMaterial size={0.01} opacity={0.2} color='white' />
+        <pointsMaterial size={1.4} opacity={0.2} color='white' />
       </points>
     )
   }
