@@ -9,7 +9,7 @@ export default class SceneWrapper extends Component {
         {
           React.Children.map(this.props.children, child => {
               if (!child) return
-              return React.cloneElement(child, { store: this.props.store })
+              return React.cloneElement(child, { store: this.props.store }, ...this.props)
           })
         }
       </scene>

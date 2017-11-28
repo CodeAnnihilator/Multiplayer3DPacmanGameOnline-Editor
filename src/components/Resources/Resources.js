@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { loadModel, loadTexture } from '@src/../utils/loadAsset'
+import { loadModel, loadTexture } from './utils/loadAsset'
 
 export default class Resources extends Component {
   constructor() {
     super()
-    this.assetsPath = 'components/Resources/assets'
     this.state = {
       firTree: null,
       treeTrumpModel: null
@@ -15,15 +14,15 @@ export default class Resources extends Component {
     Promise.resolve()
       .then(() => {
         return Promise.all([
-          loadModel(`${this.assetsPath}/firTree/firTreeModel.json`).then(geometry => this.setState({ firTree: geometry })),
-          loadModel(`${this.assetsPath}/treeTrump/treeTrumpModel.json`).then(geometry => this.setState({ treeTrumpModel: geometry }))
+          loadModel('assets/firTree/firTreeModel.json').then(geometry => this.setState({ firTree: geometry })),
+          loadModel('assets/treeTrump/treeTrumpModel.json').then(geometry => this.setState({ treeTrumpModel: geometry }))
         ]).then(() => this.props.allModelsHaveBeenLoaded())
       })
       .then(() => {
         return Promise.all([
-          loadTexture(`${this.assetsPath}/firTree/firTreeImage.jpg`),
-          loadTexture(`${this.assetsPath}/ground/forestGroundImage.jpg`),
-          loadTexture(`${this.assetsPath}/ground/stoneWallImage.jpg`),
+          loadTexture('assets/firTree/firTreeImage.jpg'),
+          loadTexture('assets/ground/forestGroundImage.jpg'),
+          loadTexture('assets/ground/stoneWallImage.jpg'),
         ]).then(() => this.props.allTexturesHaveBeenLoaded())
       })
   }
@@ -34,9 +33,9 @@ export default class Resources extends Component {
     const shoudRender = isAllModelsLoaded && isAllTexturesLoaded
     return !shoudRender ? <resources /> : (
       <resources>
-        <texture resourceId='firTreeImage' url={`${this.assetsPath}/firTree/firTreeImage.jpg`} anisotropy={ 16 } />
-        <texture resourceId='forestGroundImage' url={`${this.assetsPath}/ground/forestGroundImage.jpg`} anisotropy={ 16 } />
-        <texture resourceId='stoneWallImage' url={`${this.assetsPath}/ground/stoneWallImage.jpg`} anisotropy={ 16 } />
+        <texture resourceId='firTreeImage' url={'assets/firTree/firTreeImage.jpg'} anisotropy={ 16 } />
+        <texture resourceId='forestGroundImage' url={'assets/ground/forestGroundImage.jpg'} anisotropy={ 16 } />
+        <texture resourceId='stoneWallImage' url={'assets/ground/stoneWallImage.jpg'} anisotropy={ 16 } />
         <meshPhongMaterial shininess={0} resourceId='firTreeTexture'>
           <textureResource resourceId='firTreeImage' />
         </meshPhongMaterial>

@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Vector3 } from 'three'
 
-import SceneWrapper from '@src/components/SceneWrapper'
+import SceneWrapper from './SceneWrapper'
+
+import Camera from '@src/components/Camera/Camera'
+import Light from '@src/components/Light/Light'
+import Perspective from '@src/components/Perspective/Perspective'
 
 import SnowContainer from '@src/components/Weather/Snow/SnowContainer'
-import MainCamera from '@src/components/MainCamera/MainCamera'
-import LevelContainer from '@src/components/Level/LevelContainer'
-import Light from '@src/components/Light/Light'
-import Unsorted from '@src/components/Unsorted/Unsorted'
+// import LevelContainer from '@src/components/Level/LevelContainer'
 
 export default class Scene extends Component {
   render() {
@@ -19,9 +20,8 @@ export default class Scene extends Component {
     const shouldRender = isAllModelsLoaded && isAllTexturesLoaded
     return (
       <SceneWrapper store={this.props.store}>
-        <MainCamera name='mainCamera' />
-        { shouldRender && <Unsorted /> }
-        { shouldRender && <SnowContainer /> }
+        <Camera name='mainCamera' />
+        { shouldRender && <Perspective /> }
         <Light />
       </SceneWrapper>
     )

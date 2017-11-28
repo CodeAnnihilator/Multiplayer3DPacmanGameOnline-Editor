@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Vector3 } from 'three'
 
-export default class MainCamera extends Component {
+export default class Camera extends Component {
   render() {
     const { innerWidth, innerHeight } = window
     const { name } = this.props
