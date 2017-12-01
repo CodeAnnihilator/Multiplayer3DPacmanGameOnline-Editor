@@ -18,6 +18,8 @@
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.1.6",
     "three": "^0.86.0",
+    "three-orbit-controls": "^82.1.0",
+    "three-orbitcontrols": "^2.0.0",
     "type-to-reducer": "^1.0.4",
     "webpack": "^3.8.1",
     "yargs": "^10.0.3"

@@ -19,8 +19,8 @@ export default typeToReducer({
 
 function nextVerticlesPositions(state) {
   return state.verticles.map(ver => {
-    const verZ = ver.z - 1 > 0 ? ver.z - 1 : 400 + Math.random() * 100
-    return new Vector3(ver.x, ver.y, verZ)
+    const verY = ver.y - 1 > 0 ? ver.y - 1 : 400 + Math.random() * 100
+    return new Vector3(ver.x, verY, ver.z)
   })
 }
 
@@ -28,8 +28,8 @@ function generateVerticles() {
   const verticles = []
   _.times(3000, function(n){
     let x = Math.random() * 1000
-    let y = Math.random() * 1000
-    let z = Math.random() * 500
+    let y = Math.random() * 500
+    let z = Math.random() * 1000
     verticles.push(new Vector3(x, y, z))
   })
   return verticles

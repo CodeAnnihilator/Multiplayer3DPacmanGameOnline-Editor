@@ -8,7 +8,7 @@ export default class Snow extends Component {
   render() {
     const { verticles } = this.props
     return (
-      <points>
+      <points position={new Vector3(-500, 0, -500)}>
         <geometry vertices={verticles} />
         <pointsMaterial size={1.4} opacity={0.2} color='white' />
       </points>

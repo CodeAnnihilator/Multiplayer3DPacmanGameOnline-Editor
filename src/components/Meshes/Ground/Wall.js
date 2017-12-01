@@ -6,7 +6,7 @@ const textureTypes = [
   'stoneWall'
 ]
 
-const Ground = ({ positionX, positionY, positionZ, ground }) => {
+const Ground = ({ positionX, positionZ, positionY, ground }) => {
   const renderPosition = new Vector3(positionX, positionY, positionZ)
   return (
     <mesh castShadow receiveShadow position={renderPosition}>

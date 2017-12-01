@@ -1,9 +1,16 @@
 import { connect } from 'react-redux'
 
-import Level from './Level'
+import Camera from './Camera'
+
+import { updateCameraRemoteness } from '@src/actions/camera'
 
 const mapStateToProps = state => ({
-  levelMatrix: state.level.levelMatrix,
+  position: state.camera.position,
+  lookAt: state.camera.lookAt
 })
 
-export default connect(mapStateToProps)(Level)
+const mapDispatchToProps = dispatch => ({
+  updateCameraRemoteness: deltaY => dispatch(updateCameraRemoteness(deltaY))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Camera)

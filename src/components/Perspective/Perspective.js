@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Vector3, Vector2, Raycaster } from 'three'
+import { Vector3, Vector2, Raycaster, Euler } from 'three'
 
-import Camera from '@src/components/Camera/Camera'
+import CameraContainer from '@src/components/Camera/CameraContainer'
 
 import Rollover from './helpers/Rollover'
 import GroundGrid from './helpers/GroundGrid'
@@ -15,26 +15,18 @@ export default class Perspective extends Component {
     this.matrix = new Array(20).fill(null).map(() => new Array(20).fill([]))
     this.raycaster = new Raycaster()
     this.state = {
-      mousePosition: new Vector3(0, 0, 25),
+      mousePosition: new Vector3(0, 25, 0),
       matrix: this.matrix,
       tileSize: 50,
-      wheel: 0
+      isPlacingBlock: false
     }
   }
 
   componentDidMount() {
     document.addEventListener('mousemove', this.onDocumentMouseMove, false)
     document.addEventListener('mousedown', this.onDocumentMouseDown, false)
-    document.addEventListener('keydown', this.onDocumentKeyDown, false)
-    document.addEventListener('keyup', this.onDocumentKeyUp, false)
-    document.addEventListener('wheel', this.onDocumentWheel)
+    document.addEventListener('keypress', this.onDocumentKeyPress, false)
     this.camera = this.refs.perspectiveView.children.find(child => child.name === 'raycasterCamera')
-  }
-
-  onDocumentWheel = e => {
-    const wheelDirection = e.deltaY > 0
-    this.setState({ wheel: wheelDirection ? this.state.wheel + 1 : this.state.wheel - 1 })
-    console.log(this.state.wheel)
   }
 
   setRaycasterSettings = e => {
@@ -45,75 +37,89 @@ export default class Perspective extends Component {
     return this.raycaster.intersectObjects(this.refs.intersectObjects.children)
   }
 
-  onDocumentMouseMove = e => {
-    const intersections = this.setRaycasterSettings(e)
-    if (intersections.length > 0) {
-      const tilePosition = intersections[0].point
-      const tileFace = intersections[0].face.normal
-      const tileX = parseInt(Math.round(tilePosition.x) / this.state.tileSize, 10) * 50 - 475
-      const tileY = parseInt(Math.round(tilePosition.y) / this.state.tileSize, 10) * 50 - 475
-      const tileZpoint = parseInt(intersections[0].object.position.z, 10)
-      const tileZ = parseInt((tileZpoint + 25) / 50, 10) * 50 + 25
-      const nextTileX1 = tileFace.x !== 0 ? tileFace.x < 0 ? tileX - 50 : tileX : tileX
-      const nextTileY1 = tileFace.y !== 0 ? tileFace.y < 0 ? tileY - 50 : tileY : tileY
-      const nextTileZ1 = (tileFace.x === 0 && tileFace.y === 0) ? tileZ : tileZ - 50
-      this.setState({ mousePosition: new Vector3(nextTileX1, nextTileY1, nextTileZ1) })
-    }
-  }
-
-  defineNextMatrix = (cell, x, y, nextTileX1, nextTileY1, tileZ) => {
-    const isMatch = (y === nextTileY1 && x === nextTileX1)
+  defineNextMatrix = (cell, x, z, tileX, tileZ, tileY) => {
+    const isMatch = (x === tileX && z === tileZ)
     if (!isMatch) return cell
-    const nextCellShape = cell.length > tileZ ? cell.length : tileZ + 1
-    return new Array(nextCellShape).fill(null).map((tall, z) => {
-      return cell[z] ? cell[z] : z === tileZ ? { type: 'test', ground: 1 } : null
+    const nextCellShape = cell.length > tileY ? cell.length : tileY + 1
+    return new Array(nextCellShape).fill(null).map((tall, y) => {
+      return cell[y] ? cell[y] : y === tileY ? { type: 'test', ground: 1 } : null
     })
   }
 
-  onDocumentMouseDown = e => {
+  onDocumentKeyPress = e => {
+    if (e.keyCode === 102) this.setState({ isPlacingBlock: !this.state.isPlacingBlock })
+  }
+
+  onDocumentMouseMove = e => {
+    const { tileSize, matrix, isPlacingBlock } = this.state
     const intersections = this.setRaycasterSettings(e)
     if (intersections.length > 0) {
       const tilePosition = intersections[0].point
       const tileFace = intersections[0].face.normal
-      const tileX = parseInt(Math.round(tilePosition.x) / this.state.tileSize, 10)
-      const tileY = parseInt(Math.round(tilePosition.y) / this.state.tileSize, 10)
-      const tileZ = parseInt(Math.round(tilePosition.z) / this.state.tileSize, 10)
-      const nextTileX1 = tileFace.x !== 0 ? tileFace.x < 0 ? tileX - 1 : tileX : tileX
-      const nextTileY1 = tileFace.y !== 0 ? tileFace.y < 0 ? tileY - 1 : tileY : tileY
-      const nextMatrix = this.state.matrix
-        .map((row, y) => row.map((cell, x) => this.defineNextMatrix(cell, x, y, nextTileX1, nextTileY1, tileZ)))
-      this.setState({ matrix: nextMatrix })
+      const faceOffsetX = tileFace.x >= 0 ? 0 : -1
+      const faceOffsetZ = tileFace.z >= 0 ? 0 : -1
+      const faceOffsetY = tileFace.y >= 0 ? 0 : -1
+      const tileX = (Math.floor(Math.ceil(tilePosition.x) / tileSize) + faceOffsetX) * 50 + 25
+      const tileZ = (Math.floor(Math.ceil(tilePosition.z) / tileSize) + faceOffsetZ) * 50 + 25
+      const tileY = Math.floor(Math.ceil(tilePosition.y) / tileSize) * 50 + 25
+      this.setState({ mousePosition: new Vector3(tileX, tileY, tileZ) })
+    }
+  }
+
+  onDocumentMouseDown = e => {
+    if (e.button === 2) return
+    const { tileSize, matrix, isPlacingBlock } = this.state
+    if (!isPlacingBlock) return
+    const intersections = this.setRaycasterSettings(e)
+    if (intersections.length > 0) {
+      const tilePosition = intersections[0].point
+      const tileFace = intersections[0].face.normal
+      const mapCenterTiles = matrix.length / 2
+      const faceOffsetX = tileFace.x >= 0 ? 0 : -1
+      const faceOffsetZ = tileFace.z >= 0 ? 0 : -1
+      const faceOffsetY = tileFace.y >= 0 ? 0 : -1
+      const tileX = Math.floor(Math.ceil(tilePosition.x) / tileSize + mapCenterTiles) + faceOffsetX
+      const tileZ = Math.floor(Math.ceil(tilePosition.z) / tileSize + mapCenterTiles) + faceOffsetZ
+      const tileY = Math.floor(Math.ceil(tilePosition.y) / tileSize) + faceOffsetY
+      const tileMouseX = (Math.floor(Math.ceil(tilePosition.x) / tileSize) + faceOffsetX) * 50 + 25
+      const tileMouseZ = (Math.floor(Math.ceil(tilePosition.z) / tileSize) + faceOffsetZ) * 50 + 25
+      const tileMouseY = Math.floor(Math.ceil(tilePosition.y) / tileSize) * 50 + 25
+      const nextMatrix = matrix.map((row, x) => row.map((cell, z) => this.defineNextMatrix(cell, x, z, tileX, tileZ, tileY)))
+      this.setState({
+        matrix: nextMatrix,
+        mousePosition: new Vector3(tileMouseX, tileMouseY, tileMouseZ)
+      })
     }
   }
 
   render() {
-    const { matrix, tileSize, mousePosition } = this.state
-    const intersectionGroundOffset = new Vector3(500, 500, 0)
+    const { matrix, tileSize, mousePosition, isPlacingBlock } = this.state
+    const { store } = this.props
     return (
       <group ref='perspectiveView'>
-        <Camera name='raycasterCamera' />
-        <group position={intersectionGroundOffset}>
-          <Rollover mousePosition={mousePosition} />
+        <CameraContainer store={store} name='raycasterCamera' />
+        <group>
+          { isPlacingBlock && <Rollover mousePosition={mousePosition} /> }
           <GroundGrid length={matrix.length} tileSize={tileSize} />
           <group ref='intersectObjects'>
             {
-              matrix.map((row, y) => {
-                return row.map((cell, x) => {
-                  const tylePositionX = x * tileSize - (matrix.length - 1) * tileSize / 2
-                  const tylePositionY = y * tileSize - (matrix.length - 1) * tileSize / 2
-                  return cell.map((tall, z) => {
+              matrix.map((row, x) => {
+                return row.map((cell, z) => {
+                  const tylePositionX = x * tileSize - matrix.length * tileSize / 2 + 25
+                  const tylePositionZ = z * tileSize - matrix.length * tileSize / 2 + 25
+                  return cell.map((tall, y) => {
                     if (!tall) return
-                    return <Wall positionX={tylePositionX} positionY={tylePositionY} positionZ={z * 50 + 25} ground={tall.ground} />
+                    return <Wall positionX={tylePositionX} positionY={y * 50 + 25} positionZ={tylePositionZ} ground={tall.ground} />
                   })
                 })
               })
             }
             {
-              matrix.map((row, y) => {
-                return row.map((cell, x) => {
-                  const tylePositionX = x * tileSize - (matrix.length - 1) * tileSize / 2
-                  const tylePositionY = y * tileSize - (matrix.length - 1) * tileSize / 2
-                  return <Ground positionX={tylePositionX} positionY={tylePositionY} ground={0} />
+              matrix.map((row, x) => {
+                return row.map((cell, z) => {
+                  const tylePositionX = x * tileSize - matrix.length * tileSize / 2 + 25
+                  const tylePositionZ = z * tileSize - matrix.length * tileSize / 2 + 25
+                  return <Ground positionX={tylePositionX} positionZ={tylePositionZ} ground={0} />
                 })
               })
             }

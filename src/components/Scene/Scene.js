@@ -4,12 +4,10 @@ import { Vector3 } from 'three'
 
 import SceneWrapper from './SceneWrapper'
 
-import Camera from '@src/components/Camera/Camera'
+import CameraContainer from '@src/components/Camera/CameraContainer'
+import SnowContainer from '@src/components/Weather/Snow/SnowContainer'
 import Light from '@src/components/Light/Light'
 import Perspective from '@src/components/Perspective/Perspective'
-
-import SnowContainer from '@src/components/Weather/Snow/SnowContainer'
-// import LevelContainer from '@src/components/Level/LevelContainer'
 
 export default class Scene extends Component {
   render() {
@@ -20,8 +18,9 @@ export default class Scene extends Component {
     const shouldRender = isAllModelsLoaded && isAllTexturesLoaded
     return (
       <SceneWrapper store={this.props.store}>
-        <Camera name='mainCamera' />
+        <CameraContainer name='mainCamera' />
         { shouldRender && <Perspective /> }
+        { shouldRender && <SnowContainer /> }
         <Light />
       </SceneWrapper>
     )
