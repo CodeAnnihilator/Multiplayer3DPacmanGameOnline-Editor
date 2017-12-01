@@ -18,7 +18,22 @@ export default {
   ],
   resolve: webpackBaseConfig.resolve,
   module: {
-		rules: [ ...webpackBaseConfig.module.rules ]
+		rules: [{
+			test: /\.s?css$/,
+      exclude: /module\.s?css$/,
+      use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader', options: { modules: false, localIdentName: '[path][name]---[local]' } },
+        { loader: 'sass-loader' }
+      ]
+		},{
+			test: /module\.s?css$/,
+      use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader', options: { modules: true, localIdentName: '[path][name]---[local]' } },
+        { loader: 'sass-loader' }
+      ]
+		}, ...webpackBaseConfig.module.rules]
 	},
   output: {
     path: path.resolve(__dirname, 'dist'),

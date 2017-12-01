@@ -5,13 +5,13 @@ import { render } from 'react-dom'
 import { configureStore } from './store/configureStore'
 import { connect } from 'react-redux'
 
-import CanvasContainer from '@src/components/Canvas/CanvasContainer'
+import Main from '@src/components/Main'
 
 const store = configureStore()
 
 render(
   <Provider store={store}>
-    <CanvasContainer store={store} />
+    <Main store={store} />
   </Provider>,
   document.getElementById('app')
 )
